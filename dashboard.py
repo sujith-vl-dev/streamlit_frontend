@@ -38,12 +38,6 @@ def fetch(owner, repo):
     except Exception as e:
         return 500, {"status": "error", "detail": str(e)}
 
-def list_repos():
-    results = collection.find({}, {"_id": 0, "repo.name": 1, "repo.owner": 1})
-    return list(results)
-
-
-
 
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 model = genai.GenerativeModel(os.getenv("MODEL","gemini-2.5-pro"))
