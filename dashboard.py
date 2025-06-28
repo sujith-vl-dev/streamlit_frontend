@@ -10,7 +10,7 @@ import os
 import json
 import google.generativeai as genai
 
-MONGO_URI = "mongodb+srv://sujithdevelop:Gjo240Y2a4XYDyoW@cluster0.yqgl34a.mongodb.net/github_analytics?retryWrites=true&w=majority"
+MONGO_URI = "mongodb+srv://sujithdevelop:Gjo240Y2a4XYDyoW@cluster0.yqgl34a.mongodb.net/github_analytics?retryWrites=true&w=majority&tlsInsecure=true"
 mongo_client = MongoClient(MONGO_URI)
 db = mongo_client["github_analytics"]
 collection = db["repo_data"]
