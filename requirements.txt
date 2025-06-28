@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+pydantic
+requests
+pymongo
+google-generativeai
+streamlit
+plotly
