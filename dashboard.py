@@ -10,11 +10,12 @@ import os
 import json
 import google.generativeai as genai
 
-MONGO_URI = os.getenv("MONGO_URI")
+MONGO_URI = "mongodb+srv://sujithdevelop:Gjo240Y2a4XYDyoW@cluster0.yqgl34a.mongodb.net/github_analytics?retryWrites=true&w=majority"
 mongo_client = MongoClient(MONGO_URI)
 db = mongo_client["github_analytics"]
 collection = db["repo_data"]
-PRODUCER_API = os.getenv("PRODUCER_API")
+PRODUCER_API = "https://github-producer-api.onrender.com"
+
 
 
 def fetch(owner, repo):
@@ -39,7 +40,7 @@ def fetch(owner, repo):
         return 500, {"status": "error", "detail": str(e)}
 
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+genai.configure(api_key="AIzaSyCihZ-7-DqWurLTv3B1OnVcCafUEIaqkS8")
 model = genai.GenerativeModel(os.getenv("MODEL","gemini-2.5-pro"))
 
 def generate_repo_summary(data: dict) -> str:
