@@ -6,3 +6,4 @@ pymongo
 google-generativeai
 streamlit
 plotly
+python-dotenv

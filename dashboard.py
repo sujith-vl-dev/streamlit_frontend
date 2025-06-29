@@ -7,40 +7,21 @@ import requests
 import zipfile
 import io
 import os
-import json
-import google.generativeai as genai
+from dotenv import load_dotenv
+load_dotenv()
 
-MONGO_URI = "mongodb+srv://sujithdevelop:Gjo240Y2a4XYDyoW@cluster0.yqgl34a.mongodb.net/github_analytics?retryWrites=true&w=majority&tlsInsecure=true"
+MONGO_URI = os.getenv("MONGO_URI")
 mongo_client = MongoClient(MONGO_URI)
 db = mongo_client["github_analytics"]
 collection = db["repo_data"]
-PRODUCER_API = "https://github-producer-api.onrender.com"
+PRODUCER_API = os.getenv("PRODUCER_API")
+import json
+import google.generativeai as genai
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
-
-
-def fetch(owner, repo):
-    try:
-        url = f"{PRODUCER_API}/fetch?owner={owner}&repo={repo}"
-        res = requests.get(url)
-
-        if res.status_code != 200:
-            return res.status_code, {"status": "error", "detail": res.text}
-
-        data = res.json()
-
-        collection.update_one(
-            {"repo.name": repo, "repo.owner": owner},
-            {"$set": data},
-            upsert=True
-        )
-
-        return res.status_code, {"status": "success", "message": f"{owner}/{repo} data stored."}
-
-    except Exception as e:
-        return 500, {"status": "error", "detail": str(e)}
-
-
-genai.configure(api_key="AIzaSyCihZ-7-DqWurLTv3B1OnVcCafUEIaqkS8")
+genai.configure(api_key=os.getenv("GOOGLE_KEY"))
 model = genai.GenerativeModel(os.getenv("MODEL","gemini-2.5-pro"))
 
 def generate_repo_summary(data: dict) -> str:
@@ -117,6 +98,28 @@ def generate_repo_tags(data: dict) -> list:
     except Exception as e:
         return "[f\"#gemini_error: {str(e)}\"]"
 
+
+
+def fetch(owner, repo):
+    try:
+        url = f"{PRODUCER_API}/fetch?owner={owner}&repo={repo}"
+        res = requests.get(url)
+
+        if res.status_code != 200:
+            return res.status_code, {"status": "error", "detail": res.text}
+
+        data = res.json()
+
+        collection.update_one(
+            {"repo.name": repo, "repo.owner": owner},
+            {"$set": data},
+            upsert=True
+        )
+
+        return res.status_code, {"status": "success", "message": f"{owner}/{repo} data stored."}
+
+    except Exception as e:
+        return 500, {"status": "error", "detail": str(e)}
 
 st.set_page_config(
     page_title="GitHub Analytics Dashboard", 
